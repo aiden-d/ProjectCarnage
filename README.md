@@ -1,2 +1,2 @@
 # ProjectCarnage
-#this is a 3d super smash type game for mobile
+This is a 3d, hero based, Super-Smash-Bros type game for mobile
