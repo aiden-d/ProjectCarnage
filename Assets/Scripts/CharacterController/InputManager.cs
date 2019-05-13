@@ -5,7 +5,9 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public string attackAxis;
+    public string attackSlowAxis;
     public string blockAxis;
+    public string rollAxis;
 
     CharacterController controller;
 
@@ -20,22 +22,51 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetAxis(attackAxis) > 0)
         {
-            Debug.Log("Atack");
+            
             Attack();
         }
+        if (Input.GetAxis(attackSlowAxis) > 0)
+        {
+
+            AttackSlow();
+        }
+
         if (Input.GetAxis(blockAxis) > 0)
         {
             Block();
         }
         else
+        if (Input.GetAxis(rollAxis)>0)
+        {
+
+            Roll();
+        }
         {
             StopBlock();
         }
     }
     public void Block()
     {
-        controller.isWalking = false;
-        controller.isBlocking = true;
+        if (controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Slow") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Roll") )
+        {
+
+        }
+        else
+        {
+
+            controller.m_anim.SetBool("Block", true);
+        }
+    }
+    public void Roll()
+    {
+        if (controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Slow") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Roll"))
+        {
+
+        }
+        else
+        {
+            controller.m_anim.SetTrigger("Roll");
+        }
     }
     public void StopBlock()
     {
@@ -48,7 +79,17 @@ public class InputManager : MonoBehaviour
         {
             controller.Attack();
         }
-        
+
     }
+    public void AttackSlow()
+    {
+        if (controller.isAttacking == false)
+        {
+            controller.AttackSlow();
+        }
+
+    }
+
     
+
 }

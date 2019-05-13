@@ -8,21 +8,23 @@ using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(Animator))]
 public class CharacterController : MonoBehaviour
-    {
+{
     public float health;
 
     public float walkSpeed = 1;
     public float attackDelay;
+    public float attackSlowDelay;
     [SerializeField] float m_MovingTurnSpeed = 360;
     [SerializeField] float m_StationaryTurnSpeed = 180;
 
     //states
-    [HideInInspector] public bool isAttacking;
-    [HideInInspector]public bool isBlocking = false;
-    [HideInInspector]public bool isWalking = true;
+    bool isSlowAttack;
+    public bool isAttacking;
+    [HideInInspector] public bool isBlocking = false;
+    public bool isWalking = true;
 
     //
-    private Animator m_anim;
+    [HideInInspector] public Animator m_anim;
     private Transform m_Cam;                  // A reference to the main camera in the scenes transform
     private Vector3 m_CamForward;             // The current forward direction of the camera
     private Vector3 m_Move;
@@ -30,14 +32,15 @@ public class CharacterController : MonoBehaviour
     private bool m_Jump;
     float m_TurnAmount;
     float m_ForwardAmount;
-    Vector3 m_GroundNormal = new Vector3(0,0,0);
+    Vector3 m_GroundNormal = new Vector3(0, 0, 0);
     // Start is called before the first frame update
     void Start()
-        {
+    {
         m_anim = GetComponent<Animator>();
 
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
 
         if (Camera.main != null)
         {
@@ -48,13 +51,14 @@ public class CharacterController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-        {
-
+    { 
+        
+        
         checkStates();
         States();
         checkFall();
-            
-    }
+
+    } 
     private void FixedUpdate()
     {
 
@@ -119,43 +123,88 @@ public class CharacterController : MonoBehaviour
         {
             isWalking = false;
         }
-        else if (isBlocking || isAttacking)
+        else if (isBlocking || (isAttacking && isSlowAttack == false) )
         {
             isWalking = false;
+            m_Rigidbody.velocity = transform.forward * 0;
         }
         else { isWalking = true; }
     }
-    public void Attack()
-    {
-        isWalking = false;
-        isAttacking = true;
-        m_anim.SetTrigger("Attack_Fast");
-        Wait(attackDelay);
-        isAttacking = false;
-
-    }
+    
     void States() 
     {
-        m_anim.SetBool("Block", isBlocking);
-        m_anim.SetFloat("WalkSpeed",walkSpeed * 0.5f);
-        m_anim.SetBool("Walk", isWalking);
-        if (isWalking) 
+        if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast"))
         {
-            m_Rigidbody.velocity = transform.forward * walkSpeed;
+            isAttacking = true;
+            isWalking = false;
+            m_Rigidbody.velocity = transform.forward * 0;
         }
-        else 
+        else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Slow"))
         {
-            m_Rigidbody.velocity = transform.forward * 0 ;
+            isAttacking = true;
+            isWalking = false;
+            isSlowAttack = true;
+        }
+        else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Roll"))
+        {
+            m_Rigidbody.velocity = transform.forward * walkSpeed * 1.5f;
+
+            isAttacking = false;
+            isSlowAttack = false;
 
         }
+        else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Block"))
+        {
+            m_anim.SetBool("Block", false);
+            m_Rigidbody.velocity = transform.forward * 0;
+        }
+        else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            m_Rigidbody.velocity = transform.forward * 0;
+
+            isAttacking = false;
+            isSlowAttack = false;
+        }
+        
+        else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
+            m_Rigidbody.velocity = transform.forward * walkSpeed;
+
+            isAttacking = false;
+            isSlowAttack = false;
+        }
+
+        float f = 0;
+        
+        m_anim.SetFloat("WalkSpeed",walkSpeed * 0.5f);
+        m_anim.SetBool("Walk", isWalking);
+        
 
 
 
  }
-   
+    public void Attack()
+    {
+        
+        m_anim.SetTrigger("Attack_Fast");
+       
+        
+
+    }
+    public void AttackSlow()
+    {
+        
+        
+        m_anim.SetTrigger("Attack_Slow");
+        
+        
+
+    }
+
     IEnumerator Wait(float time)
     {
         yield return new WaitForSeconds(time);
+        
     }
     
 }
