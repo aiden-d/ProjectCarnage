@@ -12,12 +12,14 @@ public class CharacterController : MonoBehaviour
     public float health;
 
     public float walkSpeed = 1;
+    public float attackDelay;
     [SerializeField] float m_MovingTurnSpeed = 360;
     [SerializeField] float m_StationaryTurnSpeed = 180;
 
     //states
-    public bool isBlocking = false;
-    bool isWalking = true;
+    [HideInInspector] public bool isAttacking;
+    [HideInInspector]public bool isBlocking = false;
+    [HideInInspector]public bool isWalking = true;
 
     //
     private Animator m_anim;
@@ -113,15 +115,28 @@ public class CharacterController : MonoBehaviour
         float h = CrossPlatformInputManager.GetAxis("Horizontal");
         float v = CrossPlatformInputManager.GetAxis("Vertical");
 
-        if (h == 0 && v == 0)
+        if (h == 0 && v == 0 )
+        {
+            isWalking = false;
+        }
+        else if (isBlocking || isAttacking)
         {
             isWalking = false;
         }
         else { isWalking = true; }
     }
+    public void Attack()
+    {
+        isWalking = false;
+        isAttacking = true;
+        m_anim.SetTrigger("Attack_Fast");
+        Wait(attackDelay);
+        isAttacking = false;
+
+    }
     void States() 
     {
-
+        m_anim.SetBool("Block", isBlocking);
         m_anim.SetFloat("WalkSpeed",walkSpeed * 0.5f);
         m_anim.SetBool("Walk", isWalking);
         if (isWalking) 
@@ -132,12 +147,16 @@ public class CharacterController : MonoBehaviour
         {
             m_Rigidbody.velocity = transform.forward * 0 ;
 
-            m_anim.SetBool("Block", isBlocking);
-
         }
 
 
 
  }
+   
+    IEnumerator Wait(float time)
+    {
+        yield return new WaitForSeconds(time);
+    }
+    
 }
 
