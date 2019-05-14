@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 [RequireComponent(typeof(CharacterController))]
 public class InputManager : MonoBehaviour
 {
+    
+    public Joystick joystick;
+    public bool isMobile;
     public string attackAxis;
     public string attackSlowAxis;
     public string blockAxis;
@@ -89,6 +93,26 @@ public class InputManager : MonoBehaviour
         }
 
     }
+
+    //horisontal vertical
+    public Vector2 moveInput() 
+    {
+        Vector2 outVec;
+        if (isMobile)
+        {
+
+
+            outVec.x = joystick.Horizontal;
+            outVec.y = joystick.Vertical;
+        }
+        else 
+        {
+           outVec.x = CrossPlatformInputManager.GetAxis("Horizontal");
+            outVec.y = CrossPlatformInputManager.GetAxis("Vertical");
+        }
+        return outVec;
+
+ }
 
     
 

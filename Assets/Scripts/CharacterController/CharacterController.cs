@@ -5,7 +5,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
 
 [RequireComponent(typeof(Rigidbody))]
-
+[RequireComponent(typeof(InputManager))]
 [RequireComponent(typeof(Animator))]
 public class CharacterController : MonoBehaviour
 {
@@ -40,9 +40,12 @@ public class CharacterController : MonoBehaviour
     float m_TurnAmount;
     float m_ForwardAmount;
     Vector3 m_GroundNormal = new Vector3(0, 0, 0);
+
+    InputManager input;
     // Start is called before the first frame update
     void Start()
     {
+        input = GetComponent<InputManager>();
         m_anim = GetComponent<Animator>();
         m_anim.SetFloat("RollSpeed", rollAnimSpeed);
         m_anim.SetFloat("Attack_Slow_Speed", attackSlowAnimSpeed);
@@ -74,8 +77,8 @@ public class CharacterController : MonoBehaviour
         {
 
             // read inputs
-            float h = CrossPlatformInputManager.GetAxis("Horizontal");
-            float v = CrossPlatformInputManager.GetAxis("Vertical");
+            float h = input.moveInput().x;
+            float v = input.moveInput().y;
 
 
 
@@ -131,8 +134,8 @@ public class CharacterController : MonoBehaviour
         if (enableControls)
         {
 
-            float h = CrossPlatformInputManager.GetAxis("Horizontal");
-            float v = CrossPlatformInputManager.GetAxis("Vertical");
+            float h = input.moveInput().x;
+            float v = input.moveInput().y;
 
             if (h == 0 && v == 0)
             {
