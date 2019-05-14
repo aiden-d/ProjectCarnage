@@ -111,7 +111,7 @@ public class InputManager : MonoBehaviour
         else 
         {
            outVec.x = CrossPlatformInputManager.GetAxis("Horizontal");
-            outVec.y = CrossPlatformInputManager.GetAxis("Vertical");
+           outVec.y = CrossPlatformInputManager.GetAxis("Vertical");
         }
         return outVec;
 
