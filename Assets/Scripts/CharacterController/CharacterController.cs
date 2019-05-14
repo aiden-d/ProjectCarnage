@@ -9,17 +9,24 @@ using UnityStandardAssets.CrossPlatformInput;
 [RequireComponent(typeof(Animator))]
 public class CharacterController : MonoBehaviour
 {
+    public bool enableControls = true;
     public float health;
 
     public float walkSpeed = 1;
     public float attackDelay;
     public float attackSlowDelay;
+
+    public float rollSpeed =2;
+    public float rollAnimSpeed = 2;
+    public float attackFastAnimSpeed = 1;
+    public float attackSlowAnimSpeed = 1;
+
     [SerializeField] float m_MovingTurnSpeed = 360;
     [SerializeField] float m_StationaryTurnSpeed = 180;
 
     //states
-    bool isSlowAttack;
-    public bool isAttacking;
+    [HideInInspector] public bool isSlowAttack;
+   [HideInInspector] public bool isAttacking;
     [HideInInspector] public bool isBlocking = false;
     public bool isWalking = true;
 
@@ -37,7 +44,9 @@ public class CharacterController : MonoBehaviour
     void Start()
     {
         m_anim = GetComponent<Animator>();
-
+        m_anim.SetFloat("RollSpeed", rollAnimSpeed);
+        m_anim.SetFloat("Attack_Slow_Speed", attackSlowAnimSpeed);
+        m_anim.SetFloat("Attack_Fast_Speed", attackFastAnimSpeed);
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
@@ -61,41 +70,44 @@ public class CharacterController : MonoBehaviour
     } 
     private void FixedUpdate()
     {
-
-        // read inputs
-        float h = CrossPlatformInputManager.GetAxis("Horizontal");
-        float v = CrossPlatformInputManager.GetAxis("Vertical");
-
-
-
-
-        // calculate move direction to pass to character
-        if (m_Cam != null)
+        if (enableControls)
         {
-            // calculate camera relative direction to move:
-            m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
-            m_Move = v * m_CamForward + h * m_Cam.right;
-        }
-        else
-        {
-            // we use world-relative directions in the case of no main camera
-            m_Move = v * Vector3.forward + h * Vector3.right;
-        }
-        #if !MOBILE_INPUT
-        // walk speed multiplier
-        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
-        #endif
 
-        // pass all parameters to the character control script
-        Vector3 move  = m_Move;
-        if (move.magnitude > 1f) move.Normalize();
-        move = transform.InverseTransformDirection(move);
+            // read inputs
+            float h = CrossPlatformInputManager.GetAxis("Horizontal");
+            float v = CrossPlatformInputManager.GetAxis("Vertical");
 
-        move = Vector3.ProjectOnPlane(move, m_GroundNormal);
-        m_TurnAmount = Mathf.Atan2(move.x, move.z);
-        m_ForwardAmount = move.z;
-        float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
-        transform.Rotate(0, m_TurnAmount * turnSpeed * Time.deltaTime, 0);
+
+
+
+            // calculate move direction to pass to character
+            if (m_Cam != null)
+            {
+                // calculate camera relative direction to move:
+                m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
+                m_Move = v * m_CamForward + h * m_Cam.right;
+            }
+            else
+            {
+                // we use world-relative directions in the case of no main camera
+                m_Move = v * Vector3.forward + h * Vector3.right;
+            }
+#if !MOBILE_INPUT
+            // walk speed multiplier
+            if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+#endif
+
+            // pass all parameters to the character control script
+            Vector3 move = m_Move;
+            if (move.magnitude > 1f) move.Normalize();
+            move = transform.InverseTransformDirection(move);
+
+            move = Vector3.ProjectOnPlane(move, m_GroundNormal);
+            m_TurnAmount = Mathf.Atan2(move.x, move.z);
+            m_ForwardAmount = move.z;
+            float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
+            transform.Rotate(0, m_TurnAmount * turnSpeed * Time.deltaTime, 0);
+        }
     }
 
     void checkFall() 
@@ -116,24 +128,36 @@ public class CharacterController : MonoBehaviour
  }
     void checkStates() 
     {
-        float h = CrossPlatformInputManager.GetAxis("Horizontal");
-        float v = CrossPlatformInputManager.GetAxis("Vertical");
+        if (enableControls)
+        {
 
-        if (h == 0 && v == 0 )
-        {
-            isWalking = false;
+            float h = CrossPlatformInputManager.GetAxis("Horizontal");
+            float v = CrossPlatformInputManager.GetAxis("Vertical");
+
+            if (h == 0 && v == 0)
+            {
+                isWalking = false;
+            }
+            else if (isBlocking || (isAttacking && isSlowAttack == false))
+            {
+                isWalking = false;
+                m_Rigidbody.velocity = transform.forward * 0;
+            }
+            else { isWalking = true; }
         }
-        else if (isBlocking || (isAttacking && isSlowAttack == false) )
-        {
-            isWalking = false;
-            m_Rigidbody.velocity = transform.forward * 0;
-        }
-        else { isWalking = true; }
+        else isWalking = false;
+ 
     }
     
     void States() 
     {
-        if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast"))
+        if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
+        {
+            isAttacking = false;
+            isWalking = false;
+
+        }
+        else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast"))
         {
             isAttacking = true;
             isWalking = false;
@@ -147,7 +171,7 @@ public class CharacterController : MonoBehaviour
         }
         else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Roll"))
         {
-            m_Rigidbody.velocity = transform.forward * walkSpeed * 1.5f;
+            m_Rigidbody.velocity = transform.forward * rollSpeed;
 
             isAttacking = false;
             isSlowAttack = false;
