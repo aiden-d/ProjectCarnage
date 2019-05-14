@@ -24,29 +24,32 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetAxis(attackAxis) > 0)
+        if (isMobile == false)
         {
-            
-            Attack();
-        }
-        if (Input.GetAxis(attackSlowAxis) > 0)
-        {
+            if (Input.GetAxis(attackAxis) > 0)
+            {
 
-            AttackSlow();
-        }
+                Attack();
+            }
+            if (Input.GetAxis(attackSlowAxis) > 0)
+            {
 
-        if (Input.GetAxis(blockAxis) > 0)
-        {
-            Block();
-        }
-        else
-        if (Input.GetAxis(rollAxis)>0)
-        {
+                AttackSlow();
+            }
 
-            Roll();
-        }
-        {
-            StopBlock();
+            if (Input.GetAxis(blockAxis) > 0)
+            {
+                Block();
+            }
+            else
+            if (Input.GetAxis(rollAxis) > 0)
+            {
+
+                Roll();
+            }
+            {
+                StopBlock();
+            }
         }
     }
     public void Block()
