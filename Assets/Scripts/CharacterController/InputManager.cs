@@ -42,14 +42,15 @@ public class InputManager : MonoBehaviour
                 Block();
             }
             else
+            {
+                StopBlock();
+            }
             if (Input.GetAxis(rollAxis) > 0)
             {
 
                 Roll();
             }
-            {
-                StopBlock();
-            }
+            
         }
     }
     public void Block()
@@ -77,6 +78,7 @@ public class InputManager : MonoBehaviour
     }
     public void StopBlock()
     {
+        controller.m_anim.SetBool("Block", false);
         controller.isBlocking = false;
     }
 

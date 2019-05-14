@@ -1481,6 +1481,8 @@ GameObject:
   - component: {fileID: 1395264302}
   - component: {fileID: 1395264301}
   - component: {fileID: 1395264299}
+  - component: {fileID: 1395264300}
+  - component: {fileID: 1395264303}
   m_Layer: 0
   m_Name: Male_LOWPOLYGON
   m_TagString: Untagged
@@ -1565,11 +1567,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627c141e1907a402dbe981ecb2d0a94b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableControls: 1
   health: 0
-  walkSpeed: 3
+  walkSpeed: 4
+  attackDelay: 1
+  attackSlowDelay: 1
+  rollSpeed: 2
+  rollAnimSpeed: 2
+  attackFastAnimSpeed: 2
+  attackSlowAnimSpeed: 2
   m_MovingTurnSpeed: 360
   m_StationaryTurnSpeed: 180
+  isSlowAttack: 0
+  isAttacking: 0
   isBlocking: 0
+  isWalking: 1
+  m_anim: {fileID: 0}
+--- !u!114 &1395264300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5097863163073637733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd84aafc56a93b54a8585dec65894996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joystick: {fileID: 0}
+  isMobile: 1
+  attackAxis: Attack
+  attackSlowAxis: AttackSlow
+  blockAxis: Block
+  rollAxis: Roll
+--- !u!114 &1395264303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5097863163073637733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 113fdc41d9e0a473e876f34d0ee9fb67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthMultiplier: 1
 --- !u!1 &5156578547512332348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1675,6 +1719,8 @@ GameObject:
   - component: {fileID: 6649520434169055204}
   - component: {fileID: 2924387784572113928}
   - component: {fileID: 5688166213380945173}
+  - component: {fileID: 1183778500}
+  - component: {fileID: 1183778499}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -1755,6 +1801,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!54 &1183778500
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5750113606554170450}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!114 &1183778499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5750113606554170450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a840a093fdda74c71afd5caa752d04de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 5097863163073637733}
+  damage: 2
+  knockback: 5
 --- !u!1 &5918757838272942639
 GameObject:
   m_ObjectHideFlags: 0
