@@ -13,6 +13,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     public GameObject joinButtons;
     public GameObject leaveButton;
     public GameObject room;
+    public GameObject startGameButton;
     public TextMeshProUGUI enterCode;
     public TextMeshProUGUI roomNameText;
     public TextMeshProUGUI playerListText;
@@ -25,7 +26,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-       
+        startGameButton.SetActive(false);
         joinButtons.SetActive(false);
         connecting.SetActive(true);
         leaveButton.SetActive(false);
@@ -49,6 +50,15 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
             }
             playerListText.text = "Players in lobby: " + players;
 
+        }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startGameButton.SetActive(true);
+            
+        }
+        else
+        {
+            startGameButton.SetActive(false);
         }
     }
     public override void OnConnectedToMaster() 
