@@ -8,11 +8,11 @@ public class AttackScript : MonoBehaviour
     public GameObject root;
     public float damage;
     public float knockback;
-    CharacterController controller;
+    GameCharController controller;
     private void Start()
     {
         GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        controller = root.GetComponent<CharacterController>();
+        controller = root.GetComponent<GameCharController>();
     }
     private void OnCollisionEnter(Collision collision)
     {

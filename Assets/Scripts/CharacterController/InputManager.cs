@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
-[RequireComponent(typeof(CharacterController))]
+
 public class InputManager : MonoBehaviour
 {
     
@@ -13,12 +13,12 @@ public class InputManager : MonoBehaviour
     public string blockAxis;
     public string rollAxis;
 
-    CharacterController controller;
+    GameCharController controller;
 
     // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        controller = GetComponent<GameCharController>();
     }
 
     // Update is called once per frame
