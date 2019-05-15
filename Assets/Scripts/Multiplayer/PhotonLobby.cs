@@ -16,6 +16,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     public TextMeshProUGUI enterCode;
     public TextMeshProUGUI roomNameText;
     public TextMeshProUGUI playerListText;
+    public TextMeshProUGUI usernameText;
 
     private void Awake()
     {
@@ -37,8 +38,18 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.InRoom) 
         {
-            playerListText.text = "Player List: \n " +  PhotonNetwork.PlayerListOthers.ToString();
-         }
+            PhotonNetwork.NickName = usernameText.text;
+            room.SetActive(true);
+            
+            string players = "";
+            foreach (KeyValuePair<int, Photon.Realtime.Player> kvp  in PhotonNetwork.CurrentRoom.Players)
+            {
+                players += "\n" + kvp.Value.NickName;
+
+            }
+            playerListText.text = "Players in lobby: " + players;
+
+        }
     }
     public override void OnConnectedToMaster() 
     {
@@ -53,21 +64,16 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         
         if (name != null) 
         {
-
-            PhotonNetwork.JoinRoom(name);
+            Debug.Log("Name: " + name);
+            RoomOptions roomOps = new RoomOptions();
+            roomOps.IsVisible = false;
+            PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
          }
 
         Debug.Log(PhotonNetwork.CurrentRoom);
-        roomNameText.text = "Code: " + PhotonNetwork.CurrentRoom.Name;
+        
     }
-    public void JoinRandomRoom() 
-    {
-        joinButtons.SetActive(false);
-        leaveButton.SetActive(true);
-        PhotonNetwork.JoinRandomRoom();
-
-        //roomNameText.text = "Code: " + PhotonNetwork.CurrentRoom.Name;
-    }
+    
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         Debug.Log("Failed to join room");
