@@ -484,6 +484,7 @@ GameObject:
   - component: {fileID: -2250129275137371243}
   - component: {fileID: -868095747464132948}
   - component: {fileID: 8074364051413827246}
+  - component: {fileID: 2688679687278930325}
   m_Layer: 0
   m_Name: Char_Demo
   m_TagString: Player
@@ -718,6 +719,20 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &2688679687278930325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2194683223087105028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52e0e0f42a614c329e4915b503aa924, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distToDie: 50
+  networkPlayerTag: NetworkPlayer
 --- !u!1 &2253475008549435741
 GameObject:
   m_ObjectHideFlags: 0

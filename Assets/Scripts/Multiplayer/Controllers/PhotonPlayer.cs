@@ -14,15 +14,20 @@ public class PhotonPlayer : MonoBehaviour
     void Start()
     {
         PV = GetComponent<PhotonView>();
+        Spawn();
+    }
+
+
+    public void Spawn() 
+    {
         int spawnPicker = Random.Range(0, GameSetup.gs.spawnPoints.Length);
-        if (PV.IsMine) 
+        if (PV.IsMine)
         {
-            myAvatar = PhotonNetwork.Instantiate(Path.Combine(path, playerPath), GameSetup.gs.spawnPoints[spawnPicker].position, 
+            myAvatar = PhotonNetwork.Instantiate(Path.Combine(path, playerPath), GameSetup.gs.spawnPoints[spawnPicker].position,
                 GameSetup.gs.spawnPoints[spawnPicker].rotation, 0);
 
         }
     }
-
     // Update is called once per frame
     void Update()
     {
