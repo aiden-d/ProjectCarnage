@@ -3,12 +3,14 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 using TMPro;
 
 public class PhotonLobby : MonoBehaviourPunCallbacks
 {
     public static PhotonLobby lobby;
 
+    //UI
     public GameObject connecting;
     public GameObject joinButtons;
     public GameObject leaveButton;
@@ -54,6 +56,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster() 
     {
         Debug.Log("Connected to master");
+        PhotonNetwork.AutomaticallySyncScene = true;
         connecting.SetActive(false);
         joinButtons.SetActive(true);
 
@@ -97,6 +100,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
+        base.OnJoinedRoom();
         joinButtons.SetActive(false);
         leaveButton.SetActive(true);
         room.SetActive(true);
@@ -104,7 +108,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         roomNameText.text = "Room Code: " + PhotonNetwork.CurrentRoom.Name.ToString();
 
 
-        base.OnJoinedRoom();
+       
     }
     public void leaveRoom() 
     {

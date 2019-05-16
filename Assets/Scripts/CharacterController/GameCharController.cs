@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
@@ -37,6 +38,7 @@ public class GameCharController : MonoBehaviour
     private Vector3 m_Move;
     private Rigidbody m_Rigidbody;
     private bool m_Jump;
+    private PhotonView pv;
     float m_TurnAmount;
     float m_ForwardAmount;
     Vector3 m_GroundNormal = new Vector3(0, 0, 0);
@@ -45,6 +47,11 @@ public class GameCharController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        pv = GetComponent<PhotonView>();
+        if (!pv.IsMine)
+        {
+            this.enabled = false;
+        }
         input = GetComponent<InputManager>();
         m_anim = GetComponent<Animator>();
         m_anim.SetFloat("RollSpeed", rollAnimSpeed);
@@ -61,56 +68,61 @@ public class GameCharController : MonoBehaviour
 
     }
 
+
+
     // Update is called once per frame
     void Update()
-    { 
+    {
+
         
+            checkStates();
+            States();
+            checkFall();
         
-        checkStates();
-        States();
-        checkFall();
 
     } 
     private void FixedUpdate()
     {
-        if (enableControls)
-        {
-
-            // read inputs
-            float h = input.moveInput().x;
-            float v = input.moveInput().y;
-
-
-
-
-            // calculate move direction to pass to character
-            if (m_Cam != null)
+        
+            if (enableControls)
             {
-                // calculate camera relative direction to move:
-                m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
-                m_Move = v * m_CamForward + h * m_Cam.right;
-            }
-            else
-            {
-                // we use world-relative directions in the case of no main camera
-                m_Move = v * Vector3.forward + h * Vector3.right;
-            }
+
+                // read inputs
+                float h = input.moveInput().x;
+                float v = input.moveInput().y;
+
+
+
+
+                // calculate move direction to pass to character
+                if (m_Cam != null)
+                {
+                    // calculate camera relative direction to move:
+                    m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
+                    m_Move = v * m_CamForward + h * m_Cam.right;
+                }
+                else
+                {
+                    // we use world-relative directions in the case of no main camera
+                    m_Move = v * Vector3.forward + h * Vector3.right;
+                }
 #if !MOBILE_INPUT
-            // walk speed multiplier
-            if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+                // walk speed multiplier
+                if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
 #endif
 
-            // pass all parameters to the character control script
-            Vector3 move = m_Move;
-            if (move.magnitude > 1f) move.Normalize();
-            move = transform.InverseTransformDirection(move);
+                // pass all parameters to the character control script
+                Vector3 move = m_Move;
+                if (move.magnitude > 1f) move.Normalize();
+                move = transform.InverseTransformDirection(move);
 
-            move = Vector3.ProjectOnPlane(move, m_GroundNormal);
-            m_TurnAmount = Mathf.Atan2(move.x, move.z);
-            m_ForwardAmount = move.z;
-            float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
-            transform.Rotate(0, m_TurnAmount * turnSpeed * Time.deltaTime, 0);
-        }
+                move = Vector3.ProjectOnPlane(move, m_GroundNormal);
+                m_TurnAmount = Mathf.Atan2(move.x, move.z);
+                m_ForwardAmount = move.z;
+                float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
+                transform.Rotate(0, m_TurnAmount * turnSpeed * Time.deltaTime, 0);
+            }
+        
     }
 
     void checkFall() 
@@ -235,4 +247,5 @@ public class GameCharController : MonoBehaviour
     }
     
 }
+
 
