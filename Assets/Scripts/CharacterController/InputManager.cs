@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using Photon.Pun;
 
 public class InputManager : MonoBehaviour
 {
@@ -13,45 +14,57 @@ public class InputManager : MonoBehaviour
     public string blockAxis;
     public string rollAxis;
 
+    private PhotonView pv;
+
     GameCharController controller;
 
     // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<GameCharController>();
+        pv = GetComponent<PhotonView>();
+        if (!pv.IsMine)
+        {
+            this.enabled = false;
+        }
+            joystick = GameObject.FindWithTag("Joystick").GetComponent<Joystick>();
+            controller = GetComponent<GameCharController>();
+        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isMobile == false)
-        {
-            if (Input.GetAxis(attackAxis) > 0)
-            {
 
-                Attack();
-            }
-            if (Input.GetAxis(attackSlowAxis) > 0)
+            if (isMobile == false)
             {
+                if (Input.GetAxis(attackAxis) > 0)
+                {
 
-                AttackSlow();
-            }
+                    Attack();
+                }
+                if (Input.GetAxis(attackSlowAxis) > 0)
+                {
 
-            if (Input.GetAxis(blockAxis) > 0)
-            {
-                Block();
-            }
-            else
-            {
-                StopBlock();
-            }
-            if (Input.GetAxis(rollAxis) > 0)
-            {
+                    AttackSlow();
+                }
 
-                Roll();
+                if (Input.GetAxis(blockAxis) > 0)
+                {
+                    Block();
+                }
+                else
+                {
+                    StopBlock();
+                }
+                if (Input.GetAxis(rollAxis) > 0)
+                {
+
+                    Roll();
+                }
+
             }
-            
-        }
+        
     }
     public void Block()
     {

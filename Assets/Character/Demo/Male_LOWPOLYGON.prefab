@@ -1568,7 +1568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableControls: 1
-  health: 0
+  health: 1
   walkSpeed: 4
   attackDelay: 1
   attackSlowDelay: 1
