@@ -194,7 +194,7 @@ public class GameCharController : MonoBehaviour
         }
         else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Block"))
         {
-            m_anim.SetBool("Block", false);
+           
             m_Rigidbody.velocity = transform.forward * 0;
         }
         else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
