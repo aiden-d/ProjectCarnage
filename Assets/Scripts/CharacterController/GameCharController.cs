@@ -32,7 +32,7 @@ public class GameCharController : MonoBehaviour
     public bool isWalking = true;
 
     //
-    [HideInInspector] public Animator m_anim;
+     public Animator m_anim;
     private Transform m_Cam;                  // A reference to the main camera in the scenes transform
     private Vector3 m_CamForward;             // The current forward direction of the camera
     private Vector3 m_Move;
@@ -45,7 +45,7 @@ public class GameCharController : MonoBehaviour
 
     InputManager input;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         pv = GetComponent<PhotonView>();
         if (!pv.IsMine)

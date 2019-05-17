@@ -7,10 +7,15 @@ public class DeathScript : MonoBehaviour
 {
     public float distToDie;
     public string networkPlayerTag;
+    PhotonView pv;
     // Start is called before the first frame update
     void Start()
     {
-        
+        pv = GetComponent<PhotonView>();
+        if (!pv.IsMine)
+        {
+            this.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +42,7 @@ public class DeathScript : MonoBehaviour
         }
 
         localPlayer.GetComponent<PhotonPlayer>().Spawn();
-        Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
+        
     }
 }

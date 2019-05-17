@@ -26,6 +26,44 @@ public class ButtonController : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
 
+        GetPlayer();
+
+    }
+
+
+
+    public void Attack() 
+    {
+        GetPlayer();
+        im.Attack();
+
+    }
+
+    
+    public void AttackSlow() 
+    {
+        GetPlayer();
+        im.AttackSlow();
+    }
+    public void Roll() 
+    {
+        GetPlayer();
+        im.Roll();
+    }
+    public void BlockDown() 
+    {
+        GetPlayer();
+        im.Block();
+    }
+    public void StopBlock() 
+    {
+        GetPlayer();
+        
+        im.StopBlock();
+    }
+
+    public void GetPlayer()
+    {
         GameObject[] go = GameObject.FindGameObjectsWithTag(playerTag);
 
         foreach (GameObject g in go)
@@ -37,31 +75,5 @@ public class ButtonController : MonoBehaviour
             }
         }
         im = localPlayer.GetComponent<InputManager>();
-
     }
-
-
-
-    public void Attack() 
-    {
-        im.Attack();
-    }
-    public void AttackSlow() 
-    {
-        im.AttackSlow();
-    }
-    public void Roll() 
-    {
-        im.Roll();
-    }
-    public void BlockDown() 
-    {
-        im.Block();
-    }
-    public void StopBlock() 
-    {
-        Debug.Log("up");
-        im.StopBlock();
-    }
-    
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
@@ -22,12 +23,17 @@ public class HealthScript : MonoBehaviour
     {
         
     }
-    public void Hit(float damage, float knockback, Transform direction)
+    [PunRPC]
+    public void Hit(float damage, float knockback, Vector3 forward)
     {
-        healthMultiplier += damage;
-        Debug.Log("Hit");
-        anim.SetTrigger("Hit");
-        rb.velocity = direction.forward * knockback * healthMultiplier;
+        if (GetComponent<PhotonView>().IsMine)
+        {
+            healthMultiplier += damage;
+            Debug.Log("Hit");
+            anim.SetTrigger("Hit");
+            rb.velocity = forward * knockback * healthMultiplier;
+        }
+       
     }
  
 }

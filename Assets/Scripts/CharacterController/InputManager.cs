@@ -18,8 +18,9 @@ public class InputManager : MonoBehaviour
 
     GameCharController controller;
 
+    Animator anim;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         pv = GetComponent<PhotonView>();
         if (!pv.IsMine)
@@ -28,7 +29,7 @@ public class InputManager : MonoBehaviour
         }
             joystick = GameObject.FindWithTag("Joystick").GetComponent<Joystick>();
             controller = GetComponent<GameCharController>();
-        
+        anim = GetComponent<Animator>();
 
     }
 
@@ -68,30 +69,30 @@ public class InputManager : MonoBehaviour
     }
     public void Block()
     {
-        if (controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Slow") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Roll") )
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast") || anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Slow") || anim.GetCurrentAnimatorStateInfo(0).IsName("Roll") )
         {
 
         }
         else
         {
 
-            controller.m_anim.SetBool("Block", true);
+            anim.SetBool("Block", true);
         }
     }
     public void Roll()
     {
-        if (controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Slow") || controller.m_anim.GetCurrentAnimatorStateInfo(0).IsName("Roll"))
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Fast") || anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Slow") || anim.GetCurrentAnimatorStateInfo(0).IsName("Roll"))
         {
 
         }
         else
         {
-            controller.m_anim.SetTrigger("Roll");
+            anim.SetTrigger("Roll");
         }
     }
     public void StopBlock()
     {
-        controller.m_anim.SetBool("Block", false);
+        anim.SetBool("Block", false);
         controller.isBlocking = false;
     }
 
