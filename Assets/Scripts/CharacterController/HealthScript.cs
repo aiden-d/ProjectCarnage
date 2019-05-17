@@ -32,6 +32,7 @@ public class HealthScript : MonoBehaviour
             Debug.Log("Hit");
             anim.SetTrigger("Hit");
             rb.velocity = forward * knockback * healthMultiplier;
+            
         }
        
     }
