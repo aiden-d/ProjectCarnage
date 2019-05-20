@@ -1,40 +1,76 @@
-﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Animator))]
-public class HealthScript : MonoBehaviour
+﻿namespace Photon.Pun
 {
-    Rigidbody rb;
-    Animator anim;
-    //public bool isBlocking;
+    using Photon.Pun;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Animator))]
+    public class HealthScript : MonoBehaviour, IPunObservable
+    {
+        Rigidbody rb;
+        Animator anim;
+        //public bool isBlocking;
 
-    public float healthMultiplier = 1;
-    // Start is called before the first frame update
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();  
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    [PunRPC]
-    public void Hit(float damage, float knockback, Vector3 forward)
-    {
-        if (GetComponent<PhotonView>().IsMine)
+        public float healthMultiplier = 1;
+        // Start is called before the first frame update
+        void Start()
         {
-            healthMultiplier += damage;
-            Debug.Log("Hit");
-            anim.SetTrigger("Hit");
-            rb.velocity = forward * knockback * healthMultiplier;
-            
+            rb = GetComponent<Rigidbody>();
+            anim = GetComponent<Animator>();
         }
-       
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        [PunRPC]
+        public void Hit(float damage, float knockback, Vector3 forward)
+        {
+            if (GetComponent<PhotonView>().IsMine)
+            {
+                healthMultiplier += damage;
+                Debug.Log("Hit");
+                anim.SetTrigger("Hit");
+                rb.velocity = forward * knockback * healthMultiplier;
+
+            }
+
+            /*GameObject[] all;
+            all = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject g in all)
+            {
+                g.GetComponent<PhotonView>().RPC("UpdateHealth", RpcTarget.All, healthMultiplier);
+            }*/
+
+
+
+        }
+
+        /*[PunRPC]
+        public void UpdateHealth(float health)
+        {
+            healthMultiplier = health;
+        }*/
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+
+                stream.SendNext(healthMultiplier);
+            }
+            else
+            {
+                healthMultiplier = (float)stream.ReceiveNext();
+
+            }
+
+        }
+
+
     }
- 
 }

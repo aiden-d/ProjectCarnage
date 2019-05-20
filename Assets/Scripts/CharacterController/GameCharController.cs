@@ -29,8 +29,9 @@ public class GameCharController : MonoBehaviour
     [HideInInspector] public bool isSlowAttack;
    [HideInInspector] public bool isAttacking;
     [HideInInspector] public bool isBlocking = false;
-    public bool isWalking = true;
+    [HideInInspector] bool isWalking = true;
 
+    public Collider shieldCollider;
     //
      public Animator m_anim;
     private Transform m_Cam;                  // A reference to the main camera in the scenes transform
@@ -194,7 +195,7 @@ public class GameCharController : MonoBehaviour
         }
         else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Block"))
         {
-           
+            shieldCollider.enabled = true;
             m_Rigidbody.velocity = transform.forward * 0;
         }
         else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
@@ -211,6 +212,11 @@ public class GameCharController : MonoBehaviour
 
             isAttacking = false;
             isSlowAttack = false;
+        }
+
+        if (!m_anim.GetCurrentAnimatorStateInfo(0).IsName("Block")) 
+        {
+            shieldCollider.enabled = false;
         }
 
         float f = 0;

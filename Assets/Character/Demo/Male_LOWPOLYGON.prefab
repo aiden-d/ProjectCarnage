@@ -48,7 +48,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: c31007c96fbca459d9b3dc495e91542e, type: 3}
+  - {fileID: 2100000, guid: 1251cb2d544504bd297236dd85377780, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1581,7 +1581,7 @@ MonoBehaviour:
   isSlowAttack: 0
   isAttacking: 0
   isBlocking: 0
-  isWalking: 1
+  shieldCollider: {fileID: 0}
   m_anim: {fileID: 0}
 --- !u!114 &1395264300
 MonoBehaviour:
@@ -1832,6 +1832,8 @@ MonoBehaviour:
   root: {fileID: 5097863163073637733}
   damage: 2
   knockback: 5
+  heavyDamage: 0
+  heavyKnockback: 0
 --- !u!1 &5918757838272942639
 GameObject:
   m_ObjectHideFlags: 0
