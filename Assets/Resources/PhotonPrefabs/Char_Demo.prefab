@@ -339,8 +339,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   root: {fileID: 2194683223087105028}
-  damage: 2
-  knockback: 5
+  damage: 0.5
+  knockback: 1.2
   heavyDamage: 0
   heavyKnockback: 0
 --- !u!1 &1817380692315688031

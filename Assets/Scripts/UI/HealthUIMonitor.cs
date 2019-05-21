@@ -1,36 +1,44 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
-public class HealthUIMonitor : MonoBehaviour
+public class HealthUIMonitor : MonoBehaviourPunCallbacks
 {
     public string tag = "Player";
 
 
     public GameObject[] playersInOrder;
-
+    public GameObject[] foundPlayers1;
     public HealthUIObject[] UIObjects;
-    public int maxPlayers = 4;
-    public string[] playerIDS = new string[4];
+
+    public string[] playerIDS;
     // Start is called before the first frame update
     void Start()
     {
-        //pv.Owner.ActorNumber;   
+       
     }
 
     // Update is called once per frame
     void Update()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag(tag);
-        assignID(players);
+
+        if (players.Length != playerIDS.Length) 
+        {
+            assignID();
+        }
+
+
         playersInOrder = getPlayersInOrder(players);
 
 
-        int i = 0;
+        int i = 0; 
         while (i < UIObjects.Length) 
         {
-            if (playersInOrder[i] != null) 
+            if (i<playersInOrder.Length && playersInOrder[i] != null) 
             {
 
                 UIObjects[i].gameObject.SetActive(true);
@@ -48,15 +56,17 @@ public class HealthUIMonitor : MonoBehaviour
     GameObject[] getPlayersInOrder(GameObject[] foundPlayers) 
     {
 
-        GameObject[] inOrder = new GameObject[maxPlayers];
+        GameObject[] inOrder = new GameObject[foundPlayers.Length];
         int i = 0;
         while (i < playerIDS.Length) 
         {
             int ii = 0;
            
             while(ii<foundPlayers.Length) 
-            { 
-                if (foundPlayers[ii].GetComponent<PhotonView>().Owner.UserId == playerIDS[i]) 
+            {
+                char[] c = foundPlayers[ii].GetComponent<PhotonView>().ViewID.ToString().ToCharArray();
+                char[] d = playerIDS[i].ToCharArray();
+                if (c[0] == d[0]) 
                 {
                     inOrder[i] = foundPlayers[ii];
                 }
@@ -66,44 +76,44 @@ public class HealthUIMonitor : MonoBehaviour
         }
         return inOrder;
     }
-    void assignID(GameObject[] foundPlayers) 
+
+
+    void assignID() 
     {
+        StartCoroutine(wait());
+
+
+
+    }
+    IEnumerator wait() 
+    {
+        yield return new WaitForSeconds(2);
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag(tag);
+
+        playerIDS = new string[players.Length];
+
 
         int i = 0;
-        while (i < foundPlayers.Length) 
+        while (i < players.Length)
         {
-            PhotonView pv = foundPlayers[i].GetComponent<PhotonView>();
-            string id = pv.Owner.UserId;
+            playerIDS[i] = players[i].GetComponent<PhotonView>().ViewID.ToString();
 
-            bool isAssigned = false;
-
-            int ii = 0;
-            while (ii < playerIDS.Length) 
-            { 
-                if (id == playerIDS[ii]) 
-                {
-                    isAssigned = true;
-                }
-                else if (playerIDS[i] == null) 
-                {
-
-                    playerIDS[ii] = id;
-                    isAssigned = true;
-                }
-
-                ii++;
-            }
-            if (isAssigned == false) 
-            {
-
-                Debug.LogError("Too many players for UI objects");
-
-            }
             i++;
         }
+
+
+    }
+    public override void OnEnable()
+    {
+        assignID();
     }
 
 
-    
-    
+
+
+
+
+
+
 }
