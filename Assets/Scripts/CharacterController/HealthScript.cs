@@ -38,23 +38,12 @@
 
             }
 
-            /*GameObject[] all;
-            all = GameObject.FindGameObjectsWithTag("Player");
-
-            foreach (GameObject g in all)
-            {
-                g.GetComponent<PhotonView>().RPC("UpdateHealth", RpcTarget.All, healthMultiplier);
-            }*/
 
 
 
         }
 
-        /*[PunRPC]
-        public void UpdateHealth(float health)
-        {
-            healthMultiplier = health;
-        }*/
+        
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {

@@ -632,6 +632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distToDie: 20
   networkPlayerTag: NetworkPlayer
+  lives: 3
 --- !u!114 &1507585009218101100
 MonoBehaviour:
   m_ObjectHideFlags: 0

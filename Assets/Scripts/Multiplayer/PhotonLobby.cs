@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TMPro;
+using System.IO;
+using UnityEngine.SceneManagement;
 
-public class PhotonLobby : MonoBehaviourPunCallbacks
+public class PhotonLobby : MonoBehaviourPunCallbacks, IInRoomCallbacks
 {
     public static PhotonLobby lobby;
 
@@ -21,6 +23,14 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     public TextMeshProUGUI playerListText;
     public TextMeshProUGUI usernameText;
 
+    public GameObject roomController;
+    public SelectionManager selection;
+
+    public string path;
+    public string lobbyPlayerPath;
+
+
+    bool initializedLobby;
     private void Awake()
     {
         lobby = this;
@@ -28,14 +38,30 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        init();
+
+    }
+
+    void Enable() 
+    {
+        init();
+    }
+    void init() 
+    {
+        Debug.Log("Init");
         startGameButton.SetActive(false);
         joinButtons.SetActive(false);
         connecting.SetActive(true);
         leaveButton.SetActive(false);
-        PhotonNetwork.ConnectUsingSettings();
-        room.SetActive(false);
-    }
 
+        room.SetActive(false);
+        if (!PhotonNetwork.IsConnected) PhotonNetwork.ConnectUsingSettings();
+
+    }
+    void OnLevelWasLoaded() 
+    {
+        init();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -43,7 +69,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.NickName = usernameText.text;
             room.SetActive(true);
-            
+
             string players = "";
             foreach (KeyValuePair<int, Photon.Realtime.Player> kvp  in PhotonNetwork.CurrentRoom.Players)
             {
@@ -51,17 +77,28 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 
             }
             playerListText.text = "Players in lobby: " + players;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                startGameButton.SetActive(true);
 
-        }
-        if (PhotonNetwork.IsMasterClient)
-        {
-            startGameButton.SetActive(true);
+            }
+            else
+            {
+                startGameButton.SetActive(false);
+            }
+            if (initializedLobby == false) 
+            {
+                initializedLobby = true;
+                PhotonNetwork.Instantiate(Path.Combine(path, lobbyPlayerPath), new Vector3(0, 0, 0), Quaternion.identity, 0);
+            }
+
             
         }
-        else
+        else 
         {
-            startGameButton.SetActive(false);
+            initializedLobby = false;
         }
+
     }
     public override void OnConnectedToMaster() 
     {
@@ -134,6 +171,14 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     {
         JoinRoom(enterCode.text);
      }
+
+    public void StartGame() 
+    {
+        selection.SaveSelection();
+        roomController.SetActive(true);
+        
+    }
+
 
 
 

@@ -34,5 +34,7 @@ MonoBehaviour:
   - RespawnSpaceship
   - Hit
   - UpdateHealth
+  - isReady
+  - UpdateCharacterSelect
   DisableAutoOpenWizard: 1
   ShowSettings: 1

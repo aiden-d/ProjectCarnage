@@ -10,6 +10,8 @@ public class CharacterSelect : MonoBehaviour
 
     public Color normalColor;
     public Color selectedColor;
+    public bool taken = false;
+    public GameObject lockGO;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,14 +30,26 @@ public class CharacterSelect : MonoBehaviour
         {
             GetComponent<Image>().color = normalColor;
         }
+        if (taken) 
+        {
+            lockGO.SetActive(true);
+        }
+        else 
+        {
+            lockGO.SetActive(false);
+        }
     }
 
     public void TryPress()
     {
+        if (taken == false) 
+        {
+            manager.activeSelect = this;
 
-        manager.activeSelect = this;
+        }
 
-        
-    
+
+
+
     }
 }
