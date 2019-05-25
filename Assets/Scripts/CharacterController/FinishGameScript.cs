@@ -8,28 +8,41 @@ public class FinishGameScript : MonoBehaviour
     public GameObject GameUI;
     public GameObject VictoryUI;
     public GameObject DefeatUI;
+
+    bool check = false;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        
+        StartCoroutine(wait());
     }
 
     // Update is called once per frame
     void Update()
     {
-        GameObject[] g = GameObject.FindGameObjectsWithTag("Player");
-        if (g.Length == 1) 
+        if (check)
         {
-            GameUI.SetActive(false);
-            if (g[0].GetComponent<PhotonView>().IsMine) 
+            GameObject[] g = GameObject.FindGameObjectsWithTag("Player");
+            if (g.Length == 1)
             {
-                VictoryUI.SetActive(true);
-            }
-            else 
-            {
-                DefeatUI.SetActive(true);
-            }
+                GameUI.SetActive(false);
+                if (g[0].GetComponent<PhotonView>().IsMine)
+                {
+                    VictoryUI.SetActive(true);
+                }
+                else
+                {
+                    DefeatUI.SetActive(true);
+                }
 
+            }
         }
+        
+    }
+
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(3);
+
+        check = true;
     }
 }
