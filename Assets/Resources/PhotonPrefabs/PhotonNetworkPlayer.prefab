@@ -69,3 +69,4 @@ MonoBehaviour:
   myAvatar: {fileID: 0}
   path: PhotonPrefabs
   playerPath: Char_Demo
+  lifeCount: 3

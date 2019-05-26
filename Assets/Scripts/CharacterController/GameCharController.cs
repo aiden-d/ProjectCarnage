@@ -32,6 +32,8 @@ public class GameCharController : MonoBehaviour
     [HideInInspector] bool isWalking = true;
 
     public Collider shieldCollider;
+    public GameObject shield;
+    public bool shieldCoversBody = false;
     //
      public Animator m_anim;
     private Transform m_Cam;                  // A reference to the main camera in the scenes transform
@@ -44,6 +46,9 @@ public class GameCharController : MonoBehaviour
     float m_ForwardAmount;
     Vector3 m_GroundNormal = new Vector3(0, 0, 0);
 
+    [HideInInspector] public bool falling;
+
+    CapsuleCollider playerCollider;
     InputManager input;
     // Start is called before the first frame update
     void OnEnable()
@@ -60,7 +65,7 @@ public class GameCharController : MonoBehaviour
         m_anim.SetFloat("Attack_Fast_Speed", attackFastAnimSpeed);
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-
+        playerCollider = gameObject.GetComponent<CapsuleCollider>();
 
         if (Camera.main != null)
         {
@@ -135,10 +140,11 @@ public class GameCharController : MonoBehaviour
         {
 
             Debug.DrawRay(at, transform.up * -1, Color.white, 5.0f);
+            falling = falling;
         }
         else
         {
-
+            falling = true;
             m_Rigidbody.velocity = transform.up * -5;
         }
  }
@@ -195,6 +201,13 @@ public class GameCharController : MonoBehaviour
         }
         else if (m_anim.GetCurrentAnimatorStateInfo(0).IsName("Block"))
         {
+            if (shield != null) shield.SetActive(true);
+            if (shieldCoversBody)
+            {
+                playerCollider.enabled = false;
+                m_Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                
+            } 
             shieldCollider.enabled = true;
             m_Rigidbody.velocity = transform.forward * 0;
         }
@@ -216,6 +229,14 @@ public class GameCharController : MonoBehaviour
 
         if (!m_anim.GetCurrentAnimatorStateInfo(0).IsName("Block")) 
         {
+            if (shield != null) shield.SetActive(false);
+            if (shieldCoversBody)
+            {
+                playerCollider.enabled = true;
+                m_Rigidbody.constraints = RigidbodyConstraints.None;
+                m_Rigidbody.constraints =  RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+            }
             shieldCollider.enabled = false;
         }
 

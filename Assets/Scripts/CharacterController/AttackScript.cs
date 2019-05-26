@@ -13,7 +13,7 @@ public class AttackScript : MonoBehaviour
     public float heavyDamage;
     public float heavyKnockback;
     GameCharController controller;
-    private void Start()
+    private void OnEnable()
     {
         GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         controller = root.GetComponent<GameCharController>();
@@ -21,8 +21,21 @@ public class AttackScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         
-        if (collision.gameObject.tag != "Shield") 
+        if (collision.gameObject.tag != "Shield" || controller.isSlowAttack) 
         {
+            if (controller.isSlowAttack)
+            {
+                if (collision.gameObject.transform.root != root.transform)
+                {
+                    GameObject root;
+                    if (collision.collider.transform.tag == "Shield") root = collision.collider.GetComponent<ShieldScript>().root;
+                    else root = collision.collider.gameObject;
+                    PhotonView id = root.GetComponent<PhotonView>();
+                    Debug.Log(root.name + " hit");
+                    id.RPC("Hit", RpcTarget.All, heavyDamage, heavyKnockback, root.transform.forward);
+                    Debug.Log("Collision");
+                }
+            }
             if (controller.isAttacking)
             {
 
@@ -34,16 +47,7 @@ public class AttackScript : MonoBehaviour
                     Debug.Log("Collision");
                 }
             }
-            else if (controller.isSlowAttack) 
-            {
-                if (collision.gameObject.transform.root != root.transform)
-                {
-                    PhotonView id = collision.collider.gameObject.GetComponent<PhotonView>();
-                    Debug.Log(collision.collider.gameObject.name + " hit");
-                    id.RPC("Hit", RpcTarget.All, heavyDamage, heavyKnockback, root.transform.forward);
-                    Debug.Log("Collision");
-                }
-            }
+            
         }
 
     }

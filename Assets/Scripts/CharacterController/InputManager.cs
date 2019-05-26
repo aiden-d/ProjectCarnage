@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (controller.falling == true) { StopBlock(); }
             if (isMobile == false)
             {
                 if (Input.GetAxis(attackAxis) > 0)
@@ -76,7 +76,7 @@ public class InputManager : MonoBehaviour
         else
         {
 
-            anim.SetBool("Block", true);
+            if (controller.falling == false) anim.SetBool("Block", true);
         }
     }
     public void Roll()

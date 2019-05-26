@@ -49,6 +49,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IInRoomCallbacks
     void init() 
     {
         Debug.Log("Init");
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LeaveLobby();
         startGameButton.SetActive(false);
         joinButtons.SetActive(false);
         connecting.SetActive(true);

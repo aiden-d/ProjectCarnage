@@ -45,6 +45,7 @@ public class CharacterSelect : MonoBehaviour
         if (taken == false) 
         {
             manager.activeSelect = this;
+            manager.SaveSelection();
 
         }
 

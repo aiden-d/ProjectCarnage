@@ -503,7 +503,7 @@ Transform:
   m_GameObject: {fileID: 2194683223087105028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.6726015, y: 0.5, z: 2.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_Children:
   - {fileID: 4365386068289002536}
   - {fileID: 3446555491545158801}
@@ -586,7 +586,10 @@ MonoBehaviour:
   isAttacking: 0
   isBlocking: 0
   shieldCollider: {fileID: 7211964180718432728}
+  shield: {fileID: 0}
+  shieldCoversBody: 0
   m_anim: {fileID: 0}
+  falling: 0
 --- !u!114 &6397973820232852045
 MonoBehaviour:
   m_ObjectHideFlags: 0

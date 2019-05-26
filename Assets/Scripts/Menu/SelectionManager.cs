@@ -61,7 +61,8 @@ public class SelectionManager : MonoBehaviour
     }
 
     public void SaveSelection()
-    {   
+    {
+        Debug.Log("saving");
         if (activeSelect != null)
         {
             ES3.Save<string>("character", activeSelect.characterPath);
