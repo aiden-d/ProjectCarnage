@@ -96,10 +96,15 @@ public class GameCharController : MonoBehaviour
         
             if (enableControls)
             {
-
+                float h = 0;
+                float v = 0;
+                
                 // read inputs
-                float h = input.moveInput().x;
-                float v = input.moveInput().y;
+                    h = input.moveInput().x;
+                    v = input.moveInput().y;
+
+                
+                
 
 
 
@@ -157,9 +162,14 @@ public class GameCharController : MonoBehaviour
     {
         if (enableControls)
         {
+            float h = 0;
+            float v = 0;
+            
+                // read inputs
+                h = input.moveInput().x;
+                v = input.moveInput().y;
 
-            float h = input.moveInput().x;
-            float v = input.moveInput().y;
+            
 
             if (h == 0 && v == 0)
             {

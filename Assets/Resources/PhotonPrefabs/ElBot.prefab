@@ -1553,7 +1553,7 @@ Transform:
   m_LocalPosition: {x: -0, y: 0.93511033, z: 0.15451203}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5328223278187395851}
+  - {fileID: 903836052656624213}
   m_Father: {fileID: 2379657426190452120}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2126,7 +2126,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 95775435c729f6245ae196f0e2dd41bf, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60c15c1d84929144fb1ec9f59636f29c, type: 3}
---- !u!4 &5328223278187395851 stripped
+--- !u!4 &903836052656624213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 60c15c1d84929144fb1ec9f59636f29c,
     type: 3}

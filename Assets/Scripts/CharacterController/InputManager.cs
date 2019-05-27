@@ -27,12 +27,13 @@ public class InputManager : MonoBehaviour
         {
             this.enabled = false;
         }
-            joystick = GameObject.FindWithTag("Joystick").GetComponent<Joystick>();
+            
             controller = GetComponent<GameCharController>();
         anim = GetComponent<Animator>();
 
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
+            joystick = GameObject.FindWithTag("Joystick").GetComponent<Joystick>();
             isMobile = true;
         }
         else isMobile = false;
@@ -41,6 +42,11 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (controller == null)
+        {
+            Debug.Log("controller null");
+            controller = GetComponent<GameCharController>();
+        }
         if (controller.falling == true) { StopBlock(); }
             if (isMobile == false)
             {
