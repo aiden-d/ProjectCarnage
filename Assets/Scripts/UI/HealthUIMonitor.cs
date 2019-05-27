@@ -108,12 +108,4 @@ public class HealthUIMonitor : MonoBehaviourPunCallbacks
     {
         assignID();
     }
-
-
-
-
-
-
-
-
 }
