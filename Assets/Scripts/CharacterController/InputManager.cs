@@ -31,6 +31,11 @@ public class InputManager : MonoBehaviour
             controller = GetComponent<GameCharController>();
         anim = GetComponent<Animator>();
 
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            isMobile = true;
+        }
+        else isMobile = false;
     }
 
     // Update is called once per frame

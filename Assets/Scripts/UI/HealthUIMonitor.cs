@@ -43,6 +43,7 @@ public class HealthUIMonitor : MonoBehaviourPunCallbacks
 
                 UIObjects[i].gameObject.SetActive(true);
                 UIObjects[i].changeHealth(playersInOrder[i].GetComponent<HealthScript>().healthMultiplier);
+                UIObjects[i].image.sprite = playersInOrder[i].GetComponent<GameCharController>().keyImage;
             }
             else 
             {

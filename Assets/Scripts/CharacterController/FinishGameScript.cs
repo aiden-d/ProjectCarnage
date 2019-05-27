@@ -13,7 +13,7 @@ public class FinishGameScript : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        StartCoroutine(wait());
+        //StartCoroutine(wait());
     }
 
     // Update is called once per frame

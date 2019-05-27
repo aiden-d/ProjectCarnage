@@ -82,5 +82,11 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6397973820232852042, guid: 2c699fa045d434a9d8e6d9a0af0ce3a3,
+        type: 3}
+      propertyPath: keyImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 3c738e4d52ee6eb449487d776356dacf,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c699fa045d434a9d8e6d9a0af0ce3a3, type: 3}

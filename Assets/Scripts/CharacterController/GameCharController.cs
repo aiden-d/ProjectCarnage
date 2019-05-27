@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.UI;
 
 
 [RequireComponent(typeof(Rigidbody))]
@@ -10,6 +11,8 @@ using UnityStandardAssets.CrossPlatformInput;
 [RequireComponent(typeof(Animator))]
 public class GameCharController : MonoBehaviour
 {
+    public Sprite keyImage;
+    public float heightBoost;
     public bool enableControls = true;
     public float health;
 
@@ -58,6 +61,7 @@ public class GameCharController : MonoBehaviour
         {
             this.enabled = false;
         }
+        transform.position = new Vector3(transform.position.x, transform.position.y + heightBoost, transform.position.z);
         input = GetComponent<InputManager>();
         m_anim = GetComponent<Animator>();
         m_anim.SetFloat("RollSpeed", rollAnimSpeed);
@@ -140,10 +144,11 @@ public class GameCharController : MonoBehaviour
         {
 
             Debug.DrawRay(at, transform.up * -1, Color.white, 5.0f);
-            falling = falling;
+            falling = false;
         }
         else
         {
+           
             falling = true;
             m_Rigidbody.velocity = transform.up * -5;
         }
@@ -234,7 +239,15 @@ public class GameCharController : MonoBehaviour
             {
                 playerCollider.enabled = true;
                 m_Rigidbody.constraints = RigidbodyConstraints.None;
-                m_Rigidbody.constraints =  RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                if (falling)
+                {
+                    m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                }
+                else
+                {
+                    m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
+                }
+               
 
             }
             shieldCollider.enabled = false;
